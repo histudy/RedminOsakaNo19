@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="wate">
+  <title>続・姫路IT系勉強会でのRedmineの運用方法</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <style>
+    code {
+      white-space: pre-wrap;
+    }
+
+    span.smallcaps {
+      font-variant: small-caps;
+    }
+
+    span.underline {
+      text-decoration: underline;
+    }
+
+    div.column {
+      display: inline-block;
+      vertical-align: top;
+      width: 50%;
+    }
+  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section id="title-slide">
+        <h1 class="title">続・姫路IT系勉強会でのRedmineの運用方法</h1>
+        <p class="author">wate</p>
+        <p class="date">2019/03/09 第19回 Redmine大阪</p>
+      </section>
+
+      <section id="あんた誰" class="slide level2">
+        <h2>あんた誰？</h2>
+        <ul>
+          <li>Twitter: <a href="https://twitter.com/aWebprogrammer">aWebprogrammer</a></li>
+          <li>Github: <a href="https://github.com/wate">https://github.com/wate</a></li>
+          <li>元PHPer &amp; 現Ansible使い</li>
+          <li>以下のコミュニティに参加してたりもします
+            <ul>
+              <li><a href="https://histudy.jp/">姫路IT系勉強会</a></li>
+              <li>Ansible ユーザー会</li>
+              <li>さくらのクラウド ユーザーコミュニティ</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <section id="前提条件" class="slide level2">
+        <h2>前提条件</h2>
+        <p><a href="https://adventar.org/calendars/3352">Redmine Advent Calendar 2018</a>で<br />
+          他の人に記事を書いてほしいと<br />
+          無茶振りをしてみたところ、<br />
+          以下の記事を書いてくれたことが<br />
+          今回の登壇の切っ掛けでした。</p>
+        <ul>
+          <li><a href="https://histudy.jp/2018/12/02/blog/20181203_redmine_advent_calendar/">姫路IT系勉強会におけるRedmineの運用事例</a></li>
+        </ul>
+      </section>
+      <section id="おさらい" class="slide level2">
+        <h2>おさらい</h2>
+        <p>姫路IT系勉強会で登録している<br />
+          トラッカーとステータスの内容を紹介します。</p>
+      </section>
+      <section>
+        <section id="トラッカーの一覧" class="slide level2">
+          <h2>トラッカーの一覧</h2>
+          <p>トラッカーは、以下の５つがあります。</p>
+          <ul>
+            <li>要望</li>
+            <li>不具合</li>
+            <li>タスク</li>
+            <li>運用保守</li>
+            <li>その他</li>
+          </ul>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="要望">要望</h3>
+          <p>具体的なことが未定であったり<br />
+            提案などを含む場合に設定します。<br />
+            具体的に内容が決まったら<br />
+            各チケット種別に割り振ります。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="不具合">不具合</h3>
+          <p>既存の不具合などに設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="タスク">タスク</h3>
+          <p>新規や追加対応が必要な場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="運用保守">運用保守</h3>
+          <p>定例対応やサーバ保守など、<br />
+            運用保守の範囲内で対応する場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="その他">その他</h3>
+          <p>いずれにも該当しない場合に設定します。</p>
+        </section>
+      </section>
+      <section>
+        <section id="ステータスの一覧" class="slide level2">
+          <h2>ステータスの一覧</h2>
+          <p>ステータスは以下の８つがあります。</p>
+          <ul>
+            <li>未対応</li>
+            <li>対応中</li>
+            <li>対応済み</li>
+            <li>確認待ち</li>
+            <li>フィードバック</li>
+            <li>経過観察中</li>
+            <li>完了</li>
+            <li>破棄</li>
+          </ul>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="未対応">未対応</h3>
+          <p>何も対応が行われていない場合に設定します。<br />
+            チケット起票時のデフォルトのステータスです。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="対応中">対応中</h3>
+          <p>対応を行っている場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="対応済み">対応済み</h3>
+          <p>対応作業が完了しておりテスト中、<br />
+            または確認中の場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="確認待ち">確認待ち</h3>
+          <p>確認してほしい担当者や<br />
+            依頼者の確認待ちの場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="フィードバック">フィードバック</h3>
+          <p>確認してほしい担当者による確認の結果、<br />
+            元の担当者に振り戻す場合に設定します。<br />
+            例えば、「対応漏れ」「不具合報告」<br />
+            「改善提案」などです。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="経過観察中">経過観察中</h3>
+          <p>本番環境で正常に動作しているか<br />
+            経過観察中の場合に設定します。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="完了">完了</h3>
+          <p>すべての対応が完了した場合に設定します。</p>
+          <p>※終了扱いのチケットです。</p>
+        </section>
+        <section class="slide level2">
+
+          <h3 id="破棄">破棄</h3>
+          <p>対応が必要なかった場合に設定します。</p>
+          <p>※終了扱いのチケットです。</p>
+        </section>
+        <section id="今回のお話は" class="slide level2">
+          <h2>今回のお話は</h2>
+          <p>アドカレの記事では紹介しきれなかった、<br />
+            勉強会でのRedmineの運用事例の<br />
+            「その後」を紹介したいと思います。</p>
+        </section>
+      </section>
+      <section id="現状の問題点" class="slide level2">
+        <h2>現状の問題点</h2>
+        <h3 id="問題点1">問題点1</h3>
+        <p>チケットの期日が過ぎているにも関わらず<br />
+          チケットが更新されません。</p>
+        <h3 id="問題点2">問題点2</h3>
+        <p>定期的に行うタスクのチケットを<br />
+          登録するのがめんどうです。</p>
+      </section>
+      <section id="どうやって問題解決するか" class="slide level2">
+        <h2>どうやって問題解決するか</h2>
+        <p>プラグインを導入しようと思いましたが、<br />
+          以下のような弊害があります。</p>
+        <ul>
+          <li>サーバーの管理権限がない場合はどうするの？</li>
+          <li>プラグインに頼るとRedmineのバージョンアップに追従しきれない</li>
+          <li>欲しい機能とちょっと違う、機能が足りない</li>
+        </ul>
+      </section>
+      <section id="そこで" class="slide level2">
+        <h2>そこで・・</h2>
+        <p>RedmineにはREST APIの機能がありますので、<br />
+          (簡単なプログラムが組めれば)<br />
+          全部クリアできますよね？</p>
+        <p>※プログラマー的な発想</p>
+      </section>
+      <section id="どうやって解決する問題点1" class="slide level2">
+        <h2>どうやって解決する？(問題点1)</h2>
+        <p>チケットの期日が過ぎているにも関わらず<br />
+          チケットが更新されません。</p>
+        <p>Redmine自体にリマインダー機能はありますが、<br />
+          以下のような問題点が・・</p>
+        <ul>
+          <li>メールだとその人しか見えないよね</li>
+          <li>他のメールに埋もれそう</li>
+        </ul>
+        <p>そこで・・・</p>
+      </section>
+      <section id="解決方法問題点1" class="slide level2">
+        <h2>解決方法(問題点1)</h2>
+        <p>チケットの更新状況と同じように<br />
+          放置チケットもSlack通知させます。</p>
+        <p>他の人にも放置チケットの情報を共有すれば<br />
+          場合によっては引き取れるようになります。</p>
+        <p>REST API経由で期日超過のチケットを抽出して<br />
+          Slackに通知させるようにします！</p>
+        <ul>
+          <li>トラッカー：機能</li>
+          <li>優先度：高い</li>
+          <li>ステータス：進行中</li>
+        </ul>
+      </section>
+      <section id="どうやって解決する問題点2" class="slide level2">
+        <h2>どうやって解決する？(問題点2)</h2>
+        <p>定期的に行うタスクのチケットを<br />
+          登録するのがめんどうです。</p>
+        <p>一応、以下のような情報もありますが・・</p>
+        <ul>
+          <li><a href="https://redmine.tokyo/issues/273">QA #273 定期的作業をチケットで作業管理したい</a></li>
+        </ul>
+        <p>分かりますが・・</p>
+        <ul>
+          <li>プラグインの機能が少し微妙/足りない</li>
+          <li>シェルスクリプトは他の人がメンテできない</li>
+        </ul>
+      </section>
+      <section id="解決方法問題点2" class="slide level2">
+        <h2>解決方法(問題点2)</h2>
+        <p>雛形となるMarkdownファイルを用意しておいて、<br />
+          それを定期的に登録できれば解決できるのでは？</p>
+        <p>定期的にREST API経由で<br />
+          チケットを自動登録させます！</p>
+        <ul>
+          <li>トラッカー：要望</li>
+          <li>優先度：普通</li>
+          <li>ステータス：進行中</li>
+        </ul>
+      </section>
+      <section id="でどうなった" class="slide level2">
+        <h2>で、どうなった？</h2>
+        <p>元PHPerの本領を発揮して鋭意作成中！</p>
+        <p>(まだ完成してない)</p>
+        <ul>
+          <li><a href="http://www.redmine.org/projects/redmine/wiki/Rest_api">Redmine REST API</a></li>
+          <li><a href="https://github.com/kbsali/php-redmine-api">PHP Redmine API</a></li>
+        </ul>
+      </section>
+      <section id="残る問題はあと一つ" class="slide level2">
+        <h2>残る問題はあと一つ</h2>
+        <p>定期実行させるサーバーはどうするの？<br />
+          (サーバーのメンテができない、したくない)</p>
+        <p>そこで・・・</p>
+        <p>さくらのレンタルサーバーならcronが使えます！</p>
+        <p><a href="https://usortblog.com/sakuracron/">自動的に処理を実行させるcronを<br />
+            さくらスタンダードで動かしてみる</a></p>
+        <p>※普通のレンタルサーバーの使い方じゃないけど気にしません！</p>
+      </section>
+      <section id="おまけ" class="slide level2">
+        <h2>おまけ</h2>
+        <p>勉強会のRedmineに導入しているプラグインは<br />
+          以下のようなものがあります。</p>
+        <ul>
+          <li><a href="https://github.com/akiko-pusu/redmine_issue_templates">Redmine Issue Templates</a></li>
+          <li><a href="https://github.com/cat-in-136/redmine-slack">Redmine Slack</a></li>
+          <li><a href="https://github.com/onozaty/redmine-view-customize">View Customize</a></li>
+          <li><a href="https://github.com/vividtone/redmine_vividtone_my_page_blocks">My Page Blocks</a></li>
+          <li><a href="https://www.redmineup.com/pages/ja/plugins/checklists">Redmine Checklists (Light version)</a></li>
+          <li><a href="https://github.com/dkd/plantuml">PlantUML</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.js"></script>
+
+  <script>
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      // Push each slide change to the browser history
+      history: true,
+
+      // Optional reveal.js plugins
+      dependencies: [{
+          src: 'reveal.js/lib/js/classList.js',
+          condition: function() {
+            return !document.body.classList;
+          }
+        },
+        {
+          src: 'reveal.js/plugin/zoom-js/zoom.js',
+          async: true
+        },
+        {
+          src: 'reveal.js/plugin/notes/notes.js',
+          async: true
+        }
+      ]
+    });
+  </script>
+</body>
+
+</html>
